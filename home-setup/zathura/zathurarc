@@ -1,0 +1,15 @@
+set selection-clipboard clipboard
+set adjust-open width
+set guioptions none
+
+set default-bg "#1a1b26"
+set default-fg "#c0caf5"
+set statusbar-bg "#24283b"
+set statusbar-fg "#c0caf5"
+set inputbar-bg "#1a1b26"
+set inputbar-fg "#c0caf5"
+set highlight-color "rgba(122,162,247,0.4)"
+set highlight-active-color "rgba(255,158,100,0.5)"
+set recolor-lightcolor "#1a1b26"
+set recolor-darkcolor "#c0caf5"
+set recolor true
