@@ -32,9 +32,6 @@ export LS_COLORS="di=38;5;75:ln=38;5;75:so=38;5;75:pi=38;5;75:ex=38;5;75:bd=38;5
 # ---------- Autostart ----------
 #fastfetch
 
-eval "$(ssh-agent -s)" >/dev/null
-ssh-add ~/.ssh/id_ed25519 2>/dev/null
-
 # ---------- PATH and tools ----------
 # .NET
 export DOTNET_ROOT="$HOME/.dotnet"

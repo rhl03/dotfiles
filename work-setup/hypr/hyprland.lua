@@ -7,50 +7,66 @@ hl.env("HYPRCURSOR_SIZE", "24")
 
 -- Runs on every config reload
 hl.exec_cmd('gsettings set org.gnome.desktop.interface color-scheme "prefer-dark"')
-hl.exec_cmd('gsettings set org.gnome.desktop.interface gtk-theme "adw-gtk3"')
+hl.exec_cmd('gsettings set org.gnome.desktop.interface gtk-theme "adw-gtk3-dark"')
 
 -- Runs once at startup
 hl.on("hyprland.start", function()
-	hl.exec_cmd("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP")
-	hl.exec_cmd("/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1")
+  hl.exec_cmd("hyprlock")
+  hl.exec_cmd("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP")
+  hl.exec_cmd("/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1")
 
-	hl.exec_cmd("hyprctl setcursor hypr-dots-blue 24")
-	hl.exec_cmd("gsettings set org.gnome.desktop.interface cursor-theme 'hypr-dots-blue'")
-	hl.exec_cmd("gsettings set org.gnome.desktop.interface font-name 'JetBrains Mono Nerd Font 11'")
+  hl.exec_cmd("hyprctl setcursor hypr-dots-blue 24")
+  hl.exec_cmd("gsettings set org.gnome.desktop.interface cursor-theme 'hypr-dots-blue'")
+  hl.exec_cmd("gsettings set org.gnome.desktop.interface font-name 'JetBrains Mono Nerd Font 11'")
 
-	hl.exec_cmd("quickshell")
-	hl.exec_cmd("awww-daemon")
-	hl.exec_cmd("awww img /home/roan/Pictures/wallpaper.jpg")
-	hl.exec_cmd("hyprpm reload")
-	hl.exec_cmd("dunst")
-	hl.exec_cmd("blueman-applet")
+  hl.exec_cmd("quickshell")
+  hl.exec_cmd("awww-daemon")
+  hl.exec_cmd("hyprpm reload")
+  hl.exec_cmd("dunst")
+  hl.exec_cmd("blueman-applet")
+  hl.exec_cmd("awww img /home/roan/Pictures/wallpaper.jpg")
 end)
 
-------------------------------------------------------------------------------------------
---                                    MONITORS
-------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------
+--                                   MONITORS
+------------------------------------------------------------------------------------
 
-hl.monitor({ output = "eDP-1", mode = "1920x1080@60", position = "3840x0", scale = 1 })
-hl.monitor({ output = "HDMI-A-1", mode = "3840x1080@60", position = "0x0", scale = 1 })
+hl.monitor({ output = "HDMI-A-1", mode = "5120x1440@60", position = "0x0", scale = 1.25 })
 
-hl.workspace_rule({ workspace = "1", monitor = "eDP-1" })
+hl.workspace_rule({ workspace = "1", monitor = "HDMI-A-1" })
 
-------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------
 --                                 LAPTOP SCREEN
-------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------
 
--- Laptop screen off by default (overrides the eDP-1 line above)
-hl.monitor({ output = "eDP-1", disabled = true })
-
--- SUPER + SHIFT + M toggles the laptop screen (in case the big screen isn't plugged in)
-local function toggleLaptop()
-	if hl.get_monitor("eDP-1") ~= nil then
-		hl.monitor({ output = "eDP-1", disabled = true })
-	else
-		hl.monitor({ output = "eDP-1", mode = "1920x1080@60", position = "3840x0", scale = 1, disabled = false })
-	end
+-- Laptop screen turns off automatically when an external monitor is connected
+local function laptopOn()
+  hl.monitor({ output = "eDP-1", mode = "1920x1080@60", position = "auto", scale = 1, disabled = false })
 end
-hl.bind("SUPER + SHIFT + M", toggleLaptop)
+
+local function laptopOff()
+  hl.monitor({ output = "eDP-1", disabled = true })
+end
+
+local function hasExternal()
+  for _, m in ipairs(hl.get_monitors()) do
+    if m.name ~= "eDP-1" and m.name ~= "FALLBACK" then
+      return true
+    end
+  end
+  return false
+end
+
+local function updateLaptop()
+  if hasExternal() then laptopOff() else laptopOn() end
+end
+
+hl.on("hyprland.start", updateLaptop)
+hl.on("monitor.added", updateLaptop)
+hl.on("monitor.removed", updateLaptop)
+
+-- Manual override in case something goes wrong
+hl.bind("SUPER + SHIFT + M", laptopOn)
 
 ------------------------------------------------------------------------------------------
 --                                   MY PROGRAMS
@@ -100,13 +116,13 @@ hl.bind(mainMod .. " + CTRL + S", hl.dsp.window.resize({ x = 0, y = 40, relative
 
 -- Workspaces (ALT + 1..9)
 for i = 1, 9 do
-	hl.bind("ALT + " .. i, hl.dsp.focus({ workspace = i }))
+  hl.bind("ALT + " .. i, hl.dsp.focus({ workspace = i }))
 end
 
 -- Move window to workspace 1-5 / 6-10
 for i = 1, 5 do
-	hl.bind(mainMod .. " + " .. i, hl.dsp.window.move({ workspace = i }))
-	hl.bind("CTRL + SHIFT + " .. i, hl.dsp.window.move({ workspace = i + 5 }))
+  hl.bind(mainMod .. " + " .. i, hl.dsp.window.move({ workspace = i }))
+  hl.bind("CTRL + SHIFT + " .. i, hl.dsp.window.move({ workspace = i + 5 }))
 end
 
 -- Mouse
@@ -120,39 +136,39 @@ hl.bind(mainMod .. " + mouse_up", hl.dsp.focus({ workspace = "e-1" }))
 ------------------------------------------------------------------------------------------
 
 hl.config({
-	general = {
-		gaps_in = 0,
-		gaps_out = 0,
-		border_size = 2,
-		col = {
-			active_border = { colors = { "rgba(89b4faff)", "rgba(89b4faff)" }, angle = 45 },
-			inactive_border = "rgba(00000000)",
-		},
-		layout = "dwindle",
-	},
+  general = {
+    gaps_in = 0,
+    gaps_out = 0,
+    border_size = 2,
+    col = {
+      active_border = { colors = { "rgba(89b4faff)", "rgba(89b4faff)" }, angle = 45 },
+      inactive_border = "rgba(00000000)",
+    },
+    layout = "dwindle",
+  },
 
-	decoration = {
-		rounding = 2,
-		shadow = {
-			enabled = false,
-		},
-		blur = {
-			enabled = true,
-			size = 1,
-			passes = 5,
-			vibrancy = 0.1696,
-			new_optimizations = true,
-		},
-	},
+  decoration = {
+    rounding = 2,
+    shadow = {
+      enabled = false,
+    },
+    blur = {
+      enabled = true,
+      size = 1,
+      passes = 5,
+      vibrancy = 0.1696,
+      new_optimizations = true,
+    },
+  },
 
-	dwindle = {
-		force_split = 2,
-		preserve_split = true,
-	},
+  dwindle = {
+    force_split = 2,
+    preserve_split = true,
+  },
 
-	opengl = {
-		nvidia_anti_flicker = true,
-	},
+  opengl = {
+    nvidia_anti_flicker = true,
+  },
 })
 
 -- Bezier curves
@@ -176,13 +192,13 @@ hl.animation({ leaf = "layersOut", enabled = true, speed = 3, bezier = "layerOut
 ------------------------------------------------------------------------------------------
 
 hl.config({
-	input = {
-		kb_layout = "no",
-		kb_options = "grp:ctrl_space_toggle",
-		accel_profile = "flat",
-		follow_mouse = 1,
-		sensitivity = 0.3,
-		repeat_rate = 50,
-		repeat_delay = 200,
-	},
+  input = {
+    kb_layout = "no",
+    kb_options = "grp:ctrl_space_toggle",
+    accel_profile = "flat",
+    follow_mouse = 1,
+    sensitivity = 0.3,
+    repeat_rate = 50,
+    repeat_delay = 200,
+  },
 })

@@ -1,0 +1,106 @@
+configuration {
+    modi: "drun,run,window";
+    show-icons: true;
+    icon-theme: "Papirus-Dark";
+    font: "JetBrains Mono Nerd Font 11";
+    display-drun: "";
+    drun-display-format: "{name}";
+
+    /* Neovim-style navigation: Ctrl+j/k. Free those keys from their defaults first. */
+    kb-remove-to-eol: "";
+    kb-accept-entry: "Return,KP_Enter";
+    kb-row-up: "Up,Control+k";
+    kb-row-down: "Down,Control+j";
+}
+
+* {
+    bg:      #1a1b26;
+    bg-alt:  #24283b;
+    sel:     #292e42;
+    fg:      #c0caf5;
+    muted:   #565f89;
+    accent:  #7aa2f7;
+    urgent:  #f7768e;
+
+    background-color: transparent;
+    text-color:       @fg;
+}
+
+window {
+    width:            600px;
+    background-color: @bg;
+    border:           2px;
+    border-color:     @accent;
+    border-radius:    10px;
+    padding:          16px;
+}
+
+mainbox {
+    spacing:  12px;
+    children: [ inputbar, listview ];
+}
+
+inputbar {
+    background-color: @bg-alt;
+    border-radius:    8px;
+    padding:          8px 12px;
+    spacing:          8px;
+    children:         [ prompt, entry ];
+}
+
+prompt {
+    text-color: @accent;
+}
+
+entry {
+    placeholder:       "Search...";
+    placeholder-color: @muted;
+}
+
+listview {
+    lines:     8;
+    columns:   1;
+    spacing:   4px;
+    scrollbar: false;
+}
+
+element {
+    padding:       8px 12px;
+    border-radius: 6px;
+    spacing:       10px;
+}
+
+/* Override every state the default theme styles, so no light rows leak through */
+element normal.normal,
+element alternate.normal,
+element normal.active,
+element alternate.active {
+    background-color: transparent;
+    text-color:       @fg;
+}
+
+element normal.urgent,
+element alternate.urgent {
+    background-color: transparent;
+    text-color:       @urgent;
+}
+
+element selected.normal,
+element selected.active {
+    background-color: @sel;
+    text-color:       @accent;
+}
+
+element selected.urgent {
+    background-color: @sel;
+    text-color:       @urgent;
+}
+
+element-icon {
+    size: 22px;
+}
+
+element-text {
+    text-color:     inherit;
+    vertical-align: 0.5;
+}
