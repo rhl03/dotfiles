@@ -5,6 +5,7 @@ return {
       formatters_by_ft = {
         cs = { "csharpier" },
         rust = { "rustfmt" },
+        python = { "ruff_organize_imports", "ruff_format" },
         javascript = { "prettierd" },
         javascriptreact = { "prettierd" },
         typescript = { "prettierd" },

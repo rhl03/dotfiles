@@ -24,7 +24,8 @@ alias hx='helix'
 
 # ---------- Regular User Prompt ----------
 # Regular user prompt with full directory path, time, user, host, Git branch in blue
-PS1="${COLOR_BLUE}\t ${COLOR_WHITE}\u@\h ${COLOR_YELLOW}\w$(parse_git_branch)\n${COLOR_BLUE}\[\e[1m\]>\[\e[0m\] "
+# \$(...) is escaped so the branch is re-evaluated on every prompt
+PS1="${COLOR_BLUE}\t ${COLOR_WHITE}\u@\h ${COLOR_YELLOW}\w\$(parse_git_branch)\n${COLOR_BLUE}\[\e[1m\]>\[\e[0m\] "
 
 # ---------- Optional: LS Colors ----------
 export LS_COLORS="di=38;5;75:ln=38;5;75:so=38;5;75:pi=38;5;75:ex=38;5;75:bd=38;5;75:cd=38;5;75:su=38;5;75:sg=38;5;75:tw=38;5;75:ow=38;5;75:"
@@ -44,12 +45,41 @@ export PATH="$HOME/.npm-global/bin:$PATH"
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
+# Android SDK (React Native / Gradle)
+export ANDROID_HOME="$HOME/Android/Sdk"
+export PATH="$PATH:$ANDROID_HOME/platform-tools"
+
 # ~/.local/bin (uv env script + Hermes Agent)
 [ -f "$HOME/.local/bin/env" ] && . "$HOME/.local/bin/env"
 export PATH="$HOME/.local/bin:$PATH"
+export PATH="$HOME/.cargo/bin:$PATH"
 
 # ---------- Lua ----------
 export LUA_PATH='/usr/share/lua/5.5/?.lua;/usr/local/share/lua/5.5/?.lua;/usr/local/share/lua/5.5/?/init.lua;/usr/share/lua/5.5/?/init.lua;/usr/local/lib/lua/5.5/?.lua;/usr/local/lib/lua/5.5/?/init.lua;/usr/lib/lua/5.5/?.lua;/usr/lib/lua/5.5/?/init.lua;./?.lua;./?/init.lua;/home/roan/.luarocks/share/lua/5.5/?.lua;/home/roan/.luarocks/share/lua/5.5/?/init.lua'
 export LUA_CPATH='/usr/local/lib/lua/5.5/?.so;/usr/lib/lua/5.5/?.so;/usr/local/lib/lua/5.5/loadall.so;/usr/lib/lua/5.5/loadall.so;./?.so;/home/roan/.luarocks/lib/lua/5.5/?.so'
-export CLAUDE_CODE_OAUTH_TOKEN="WDCxzUL4XuMB8jKQygaPPFskYfy4wn239h4qqLK2C7n5vZxf#SS8qYNCqIdkMwaXSE3_k6VlvDkuIoo-Xb3zikmipaqU"
+
+# ---------- Secrets (never committed) ----------
+# Tokens and keys live in ~/.bashrc.secrets, which is NOT in the dotfiles repo
+[ -f "$HOME/.bashrc.secrets" ] && . "$HOME/.bashrc.secrets"
 # End of regular user profile config
+
+# fnm
+FNM_PATH="/home/roan/.local/share/fnm"
+if [ -d "$FNM_PATH" ]; then
+  export PATH="$FNM_PATH:$PATH"
+  eval "$(fnm env --shell bash)"
+fi
+
+# fnm
+FNM_PATH="/home/roan/.local/share/fnm"
+if [ -d "$FNM_PATH" ]; then
+  export PATH="$FNM_PATH:$PATH"
+  eval "$(fnm env --shell bash)"
+fi
+
+# fnm
+FNM_PATH="/home/roan/.local/share/fnm"
+if [ -d "$FNM_PATH" ]; then
+  export PATH="$FNM_PATH:$PATH"
+  eval "$(fnm env --shell bash)"
+fi
