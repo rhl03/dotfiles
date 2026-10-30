@@ -10,7 +10,7 @@ return {
         javascriptreact = { "prettierd" },
         typescript = { "prettierd" },
         typescriptreact = { "prettierd" },
-        kotlin = { "ktlint" },
+        kotlin = { lsp_format = "prefer" },
       },
       formatters = {
         prettier = {
