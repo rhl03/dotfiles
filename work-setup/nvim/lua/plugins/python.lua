@@ -5,7 +5,14 @@ return {
       basedpyright = {
         enabled = false, -- replaced by pyrefly
       },
-      pyrefly = {},
+      pyrefly = {
+        init_options = {
+          pyrefly = {
+            -- Use Pyrefly's standard preset, even without a pyrefly.toml or pyproject.toml.
+            typeCheckingMode = "default",
+          },
+        },
+      },
       ruff = {
         init_options = {
           settings = {
