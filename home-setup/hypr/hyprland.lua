@@ -23,9 +23,11 @@ hl.on("hyprland.start", function()
 
 	-- Startup services
 	hl.exec_cmd("quickshell")
+	h1.exec_cmd("awww-deamon")
 	hl.exec_cmd("wpaperd")
 	hl.exec_cmd("mako")
 	hl.exec_cmd("gsr-ui")
+	hl.exec_cmd("awww img /home/roan/Pictures/wallpaper.jpg")
 end)
 
 ------------------------------------------------------------------------------------------
@@ -123,7 +125,7 @@ hl.config({
 		shadow = {
 			enabled = true,
 			range = 8,
-			render_power = 1000,
+			render_power = 3,
 			color = "rgba(7aa2f755)",
 			color_inactive = "rgba(1a1b2600)",
 		},
